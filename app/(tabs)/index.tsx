@@ -1,55 +1,49 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Button } from '@/components/ui/Button';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+          source={require('@/assets/images/oansa.jpeg')}
+          style={styles.homeLogo}
         />
-      }>
+      }
+    >
+      <View style={styles.switchRoleContainer}>
+        <Ionicons
+          name="person-circle-outline"
+          size={28}
+          color="white"
+          onPress={() => console.log('Switch role tapped')}
+        />
+      </View>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+        <ThemedText type="title">Bienvenido, Líder!</ThemedText>
       </ThemedView>
+
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+        <Button
+          title="Registrar Puntos"
+          icon="create-outline"
+          onPress={() => router.push('/register')}
+        />
+        <Button
+          title="Ver Resumen"
+          icon="analytics-outline"
+          onPress={() => router.push('/summary')}
+        />
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -60,16 +54,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginBottom: 16,
   },
   stepContainer: {
-    gap: 8,
+    gap: 16,
     marginBottom: 8,
+    marginTop: 16,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
+  homeLogo: {
+    height: 258,
+    width: 380,
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    //position: 'absolute',
   },
+  switchRoleContainer: {
+    position: 'absolute',
+    top: 32,
+    right: 16,
+    zIndex: 10,
+  }
 });
