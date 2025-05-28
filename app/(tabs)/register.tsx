@@ -2,12 +2,13 @@ import { ThemedText } from '@/components/ThemedText';
 import { Clubber } from '@/models/clubber';
 import { ClubberRecord } from '@/models/clubber-record';
 import { getClubbers, saveClubbers } from '@/services/ClubberServiceAsyncStorage';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
-import AddClubber from '@/components/shared/AddClubber';
-import ClubberList from '@/components/shared/ClubberList';
-import RegisterForm from '@/components/shared/RegisterForm';
+import AddClubber from '@/components/common/AddClubber';
+import ClubberList from '@/components/common/ClubberList';
+import RegisterForm from '@/components/common/RegisterForm';
 import { ThemedModal } from '@/components/ThemedModal';
 import { Ionicons } from '@expo/vector-icons';
 
