@@ -6,10 +6,23 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
+import { UserServiceAsyncStorage } from '@/services/UserServiceAsyncStorage';
 import { Ionicons } from '@expo/vector-icons';
+import { useEffect, useState } from 'react';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadUserName = async () => {
+      const user = await UserServiceAsyncStorage.getUser();
+      const firstName = user?.name?.split(' ')[0];
+      setUserName(firstName ?? 'Líder');
+    };
+    loadUserName();
+  }, []);
+
 
   return (
     <ParallaxScrollView
@@ -30,7 +43,7 @@ export default function HomeScreen() {
         />
       </View>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Bienvenido, Líder!</ThemedText>
+        <ThemedText type="title">Bienvenido, {userName}!</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
