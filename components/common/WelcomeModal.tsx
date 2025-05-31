@@ -1,4 +1,3 @@
-// components/WelcomeModal.tsx
 import { useUser } from '@/context/UserContext';
 import { Club } from '@/models/enums/club.enum';
 import { UserRole } from '@/models/enums/user-role.enum';
@@ -16,12 +15,11 @@ export default function WelcomeModal({ visible, onFinish }: WelcomeModalProps) {
   const [name, setName] = useState('');
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
 
-  const {setUser} = useUser();
+  const {refreshUser} = useUser();
   const handleStart = async () => {
     if (!name || !selectedClub) return;
     const newUser = { name, club: selectedClub, role: UserRole.Leader };
-    await UserServiceAsyncStorage.saveUser(newUser);
-    setUser(newUser);
+    await UserServiceAsyncStorage.saveUser(newUser).then(() => refreshUser());
     onFinish();
   };
 

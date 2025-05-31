@@ -26,3 +26,21 @@ export const Colors = {
     border: '#ddd',
   },
 };
+
+export const ClubColors = {
+  chispas: {
+    light: '#FFF9C4',  
+    primary: '#FFEB3B',
+    dark: '#FBC02D',   
+  },
+  llamas: {
+    light: '#A5D6A7',  
+    primary: '#4CAF50',
+    dark: '#388E3C',   
+  },
+  antorchas: {
+    light: '#BBDEFB',  
+    primary: '#2a7ef5',
+    dark: '#2453c9',   
+  },
+};
