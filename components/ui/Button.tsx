@@ -1,4 +1,3 @@
-// components/Button.tsx
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -10,6 +9,18 @@ type Props = {
   severity?: "primary" | "secondary" | "info" | "success" | "danger";
 };
 
+/**
+ * A custom button component for React Native, supporting optional icons, disabled state,
+ * and multiple severity styles (primary, secondary, info, success, danger).
+ *
+ * @param {string} title - The text label displayed on the button.
+ * @param {string} [icon] - Optional Ionicons icon name to display to the left of the label.
+ * @param {boolean} [disabled] - If true, disables the button and applies a disabled style.
+ * @param {() => void} onPress - Callback function invoked when the button is pressed.
+ * @param {"primary" | "secondary" | "info" | "success" | "danger"} [severity] - Optional severity type to determine button color.
+ *
+ * @returns {JSX.Element} The rendered button component.
+ */
 export function Button({ title, icon, disabled, onPress, severity }: Props) {
   const getSeverityStyle = () => {
     switch (severity) {
@@ -20,7 +31,7 @@ export function Button({ title, icon, disabled, onPress, severity }: Props) {
       case "info":
         return { backgroundColor: "#fbbf24" };
       case "success":
-        return { backgroundColor: "#16a34a" };
+        return { backgroundColor: "#22C55E" };
       case "danger":
         return { backgroundColor: "#dc2626" };
       default:
@@ -53,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   disabled: {
-    backgroundColor: '#a1c4fd',
+    opacity: 0.5,
   },
   inner: {
     flexDirection: 'row',

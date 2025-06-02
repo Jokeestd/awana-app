@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedTextInput } from '@/components/ThemedTextInput';
 import { Button } from '@/components/ui/Button';
 import { ThemedPicker } from '@/components/ui/ThemedPicker';
+import { useUser } from '@/context/UserContext';
 import { Club } from '@/models/enums/club.enum';
 import { UserRole } from '@/models/enums/user-role.enum';
 import { User } from '@/models/user';
@@ -16,7 +17,9 @@ export default function ProfileScreen() {
   const [user, setUser] = useState<User | null>(null);
   const [editedUser, setEditedUser] = useState<User | null>(null);
   const [newRole, setNewRole] = useState<UserRole | ''>('');
+
   const router = useRouter();
+  const {refreshUser} = useUser()
 
   const userMock: User = {
     name: 'Juan Pérez',
@@ -36,6 +39,7 @@ export default function ProfileScreen() {
     if (editedUser) {
       await UserServiceAsyncStorage.saveUser(editedUser);
       setUser(editedUser);
+      await refreshUser();
       Alert.alert('Perfil actualizado');
     }
   };

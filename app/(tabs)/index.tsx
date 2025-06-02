@@ -2,63 +2,79 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
+import ClubBadge from '@/components/common/ClubBadge';
+import WelcomeModal from '@/components/common/WelcomeModal';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
+import { useUser } from '@/context/UserContext';
 import { UserServiceAsyncStorage } from '@/services/UserServiceAsyncStorage';
-import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [userName, setUserName] = useState<string | null>(null);
+  //const [userName, setUserName] = useState<string | null>(null);
+  //const [club, setClub] = useState<Club>();
+  const [showModal, setShowModal] = useState(false);
+
+  const { user } = useUser();
+
+  const loadUser = async () => {
+    const user = await UserServiceAsyncStorage.getUser();
+    if (!user) {
+      setShowModal(true); // show modal if no user
+    }
+  };
 
   useEffect(() => {
-    const loadUserName = async () => {
-      const user = await UserServiceAsyncStorage.getUser();
-      const firstName = user?.name?.split(' ')[0];
-      setUserName(firstName ?? 'Líder');
-    };
-    loadUserName();
+    loadUser();
   }, []);
 
+  const handleFinishWelcome = async () => {
+    setShowModal(false);
+    await loadUser(); // refresh user data after welcome
+  };
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/oansa.jpeg')}
-          style={styles.homeLogo}
-        />
-      }
-    >
-      <View style={styles.switchRoleContainer}>
-        <Ionicons
-          name="person-circle-outline"
-          size={28}
-          color="white"
-          onPress={() => console.log('Switch role tapped')}
-        />
-      </View>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Bienvenido, {userName}!</ThemedText>
-      </ThemedView>
+    <>
+      <WelcomeModal visible={showModal} onFinish={handleFinishWelcome} />
+      {user && (
+        <View style={styles.clubBadgeContainer}>
+          <ClubBadge size={45}/>
+          <ThemedText type="title" style={{ color: 'white' }}>
+            {user?.club}
+          </ThemedText>
+        </View>
+     )}
 
-      <ThemedView style={styles.stepContainer}>
-        <Button
-          title="Registrar Puntos"
-          icon="create-outline"
-          onPress={() => router.push('/register')}
-        />
-        <Button
-          title="Ver Resumen"
-          icon="analytics-outline"
-          onPress={() => router.push('/summary')}
-        />
-      </ThemedView>
-    </ParallaxScrollView>
+      <ParallaxScrollView
+        headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+        headerImage={
+          <Image
+            source={require('@/assets/images/oansa.jpeg')}
+            style={styles.homeLogo}
+          />
+        }
+      >
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">Hola, {user?.name?.split(' ')[0]}!</ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.stepContainer}>
+          <Button
+            title="Registrar Puntos"
+            icon="create-outline"
+            onPress={() => router.push('/register')}
+          />
+          <Button
+            title="Ver Resumen"
+            icon="analytics-outline"
+            onPress={() => router.push('/summary')}
+          />
+        </ThemedView>
+      </ParallaxScrollView>
+    </>
   );
 }
 
@@ -76,15 +92,24 @@ const styles = StyleSheet.create({
   },
   homeLogo: {
     height: 258,
-    width: 380,
+    width: 390,
     bottom: 0,
     left: 0,
-    //position: 'absolute',
   },
-  switchRoleContainer: {
+  ClubContainer: {
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  clubBadgeContainer: {
     position: 'absolute',
-    top: 32,
-    right: 16,
-    zIndex: 10,
-  }
+    flexDirection: 'row',
+    zIndex: 1,
+    top: 80,
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 12,
+    paddingLeft: 20,
+    width: '100%',
+    gap: 16,
+  },
 });
